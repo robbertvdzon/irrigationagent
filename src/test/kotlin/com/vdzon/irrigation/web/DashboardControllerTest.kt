@@ -17,9 +17,13 @@ class DashboardControllerTest {
 
     @Test
     fun `test index page returns 200 and correct view`() {
-        mockMvc.perform(get("/"))
+        val result = mockMvc.perform(get("/"))
             .andExpect(status().isOk)
             .andExpect(view().name("index"))
+            .andReturn()
+        
+        println("[DEBUG_LOG] Content-Type: " + result.response.contentType)
+        println("[DEBUG_LOG] Body: " + result.response.contentAsString)
     }
 
     @Test
