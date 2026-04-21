@@ -1,6 +1,6 @@
 package com.vdzon.irrigation.it.stepdefinitions
 
-import com.vdzon.irrigation.dashboard.IrrigationAgent
+import com.vdzon.irrigation.dashboard.internal.IrrigationAgent
 import com.vdzon.irrigation.advisory.internal.persistence.WeatherForecastRepository
 import com.vdzon.irrigation.advisory.internal.persistence.RainHistoryRepository
 import com.vdzon.irrigation.irrigation.internal.persistence.IrrigationAdviceRepository

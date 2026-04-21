@@ -1,4 +1,4 @@
-package com.vdzon.irrigation.dashboard
+package com.vdzon.irrigation.dashboard.internal.web
 
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

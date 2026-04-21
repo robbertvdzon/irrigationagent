@@ -1,7 +1,7 @@
-package com.vdzon.irrigation.irrigation
+package com.vdzon.irrigation.irrigation.internal
 
 import com.vdzon.irrigation.advisory.IrrigationProposed
-import com.vdzon.irrigation.irrigation.internal.HardwareController
+import com.vdzon.irrigation.irrigation.IrrigationPort
 import com.vdzon.irrigation.irrigation.internal.persistence.*
 import org.slf4j.LoggerFactory
 import org.springframework.context.event.EventListener
@@ -12,21 +12,21 @@ import java.time.LocalDateTime
 
 @Service
 class IrrigationService(
-    private val hardwareController: HardwareController,
+    private val hardwareIrrigationAdapter: HardwareIrrigationAdapter,
     private val irrigationAdviceRepository: IrrigationAdviceRepository,
     private val irrigationEventRepository: IrrigationEventRepository
-) {
+) : IrrigationPort {
     private val logger = LoggerFactory.getLogger(IrrigationService::class.java)
 
     @EventListener
     @Transactional
-    fun onIrrigationProposed(event: IrrigationProposed) {
+    override fun onIrrigationProposed(event: IrrigationProposed) {
         logger.info("Received irrigation proposal for ${event.date}: ${event.durationMinutes} minutes")
         saveAdvice(event.date, event.durationMinutes, "PENDING")
     }
 
     @Transactional
-    fun saveAdvice(date: LocalDate, minutes: Int, status: String) {
+    override fun saveAdvice(date: LocalDate, minutes: Int, status: String) {
         val advice = irrigationAdviceRepository.findByDate(date) ?: IrrigationAdviceEntity(date = date, durationMinutes = minutes, status = status)
         advice.durationMinutes = minutes
         advice.status = status
@@ -35,7 +35,7 @@ class IrrigationService(
     }
 
     @Transactional
-    fun executeAdvice(date: LocalDate) {
+    override fun executeAdvice(date: LocalDate) {
         val advice = irrigationAdviceRepository.findByDate(date)
         if (advice == null || advice.durationMinutes <= 0) {
             logger.info("No irrigation needed or advice found for $date")
@@ -48,7 +48,7 @@ class IrrigationService(
         }
 
         logger.info("Executing irrigation advice for $date: ${advice.durationMinutes} minutes")
-        hardwareController.startIrrigation(advice.durationMinutes)
+        hardwareIrrigationAdapter.startIrrigation(advice.durationMinutes)
         
         advice.status = "EXECUTED"
         irrigationAdviceRepository.save(advice)
@@ -62,7 +62,7 @@ class IrrigationService(
         )
     }
 
-    fun getAdvices() = irrigationAdviceRepository.findTop7ByOrderByDateDesc()
-    fun getTodayAdvice() = irrigationAdviceRepository.findByDate(LocalDate.now())
-    fun getEvents() = irrigationEventRepository.findTop7ByOrderByEventDateDesc()
+    override fun getAdvices() = irrigationAdviceRepository.findTop7ByOrderByDateDesc()
+    override fun getTodayAdvice() = irrigationAdviceRepository.findByDate(LocalDate.now())
+    override fun getEvents() = irrigationEventRepository.findTop7ByOrderByEventDateDesc()
 }

@@ -1,6 +1,7 @@
-package com.vdzon.irrigation.advisory
+package com.vdzon.irrigation.advisory.internal
 
-import com.vdzon.irrigation.advisory.internal.WeatherClient
+import com.vdzon.irrigation.advisory.AdvisoryPort
+import com.vdzon.irrigation.advisory.IrrigationProposed
 import com.vdzon.irrigation.advisory.internal.persistence.*
 import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationEventPublisher
@@ -14,11 +15,11 @@ class AdvisoryService(
     private val weatherForecastRepository: WeatherForecastRepository,
     private val rainHistoryRepository: RainHistoryRepository,
     private val eventPublisher: ApplicationEventPublisher
-) {
+) : AdvisoryPort {
     private val logger = LoggerFactory.getLogger(AdvisoryService::class.java)
 
     @Transactional
-    fun calculateAndProposeAdvice(date: LocalDate) {
+    override fun calculateAndProposeAdvice(date: LocalDate) {
         logger.info("Calculating advice for $date")
         
         // 1. Fetch data
@@ -57,6 +58,6 @@ class AdvisoryService(
         eventPublisher.publishEvent(IrrigationProposed(date, durationMinutes))
     }
 
-    fun getForecasts() = weatherForecastRepository.findTop7ByOrderByForecastDateDesc()
-    fun getRainHistory() = rainHistoryRepository.findTop7ByOrderByDateDesc()
+    override fun getForecasts() = weatherForecastRepository.findTop7ByOrderByForecastDateDesc()
+    override fun getRainHistory() = rainHistoryRepository.findTop7ByOrderByDateDesc()
 }

@@ -1,11 +1,11 @@
 package com.vdzon.irrigation.irrigation.internal
 
-import org.springframework.stereotype.Service
+import org.springframework.stereotype.Component
 import org.slf4j.LoggerFactory
 
-@Service
-class HardwareController {
-    private val logger = LoggerFactory.getLogger(HardwareController::class.java)
+@Component
+class HardwareIrrigationAdapter {
+    private val logger = LoggerFactory.getLogger(HardwareIrrigationAdapter::class.java)
 
     fun startIrrigation(durationMinutes: Int) {
         logger.info("Starting hardware irrigation for $durationMinutes minutes")
