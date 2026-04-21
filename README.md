@@ -3,6 +3,7 @@ Project: Garden Irrigation Advisor
 Doen:
 [X] specs maken
 [X] ADR's maken
+[ ] IT tests met postgresql en wiremock
 [ ] modulith gebruiken
 [ ] events gebruiken (persisted)
 [ ] saga's
