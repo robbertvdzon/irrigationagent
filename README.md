@@ -5,9 +5,9 @@ Todo:
 [X] create ADRs
 [X] IT tests with postgresql and wiremock
 [X] use modulith
-[ ] use events (persisted)
+[X] everything async (Kotlin Coroutines + R2DBC + WebClient)
+[X] use events (persisted)
 [ ] sagas
-[ ] everything async
 [ ] use spring AI
 [ ] latest kotlin and spring version
 

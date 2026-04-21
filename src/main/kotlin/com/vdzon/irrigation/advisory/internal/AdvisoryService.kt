@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import kotlinx.coroutines.flow.toList
 import java.time.LocalDate
 
 @Service
@@ -19,7 +20,7 @@ class AdvisoryService(
     private val logger = LoggerFactory.getLogger(AdvisoryService::class.java)
 
     @Transactional
-    override fun calculateAndProposeAdvice(date: LocalDate) {
+    override suspend fun calculateAndProposeAdvice(date: LocalDate) {
         logger.info("Calculating advice for $date")
         
         // 1. Fetch data
@@ -58,6 +59,6 @@ class AdvisoryService(
         eventPublisher.publishEvent(IrrigationProposed(date, durationMinutes))
     }
 
-    override fun getForecasts() = weatherForecastRepository.findTop7ByOrderByForecastDateDesc()
-    override fun getRainHistory() = rainHistoryRepository.findTop7ByOrderByDateDesc()
+    override suspend fun getForecasts() = weatherForecastRepository.findAllByOrderByForecastDateDesc().toList()
+    override suspend fun getRainHistory() = rainHistoryRepository.findAllByOrderByDateDesc().toList()
 }

@@ -5,7 +5,7 @@ import com.vdzon.irrigation.advisory.internal.persistence.WeatherForecastEntity
 import java.time.LocalDate
 
 interface AdvisoryPort {
-    fun calculateAndProposeAdvice(date: LocalDate)
-    fun getForecasts(): List<WeatherForecastEntity>
-    fun getRainHistory(): List<RainHistoryEntity>
+    suspend fun calculateAndProposeAdvice(date: LocalDate)
+    suspend fun getForecasts(): List<WeatherForecastEntity>
+    suspend fun getRainHistory(): List<RainHistoryEntity>
 }

@@ -19,10 +19,17 @@ class CucumberSpringConfiguration {
     class Initializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
         override fun initialize(configurableApplicationContext: ConfigurableApplicationContext) {
             postgres.start()
+            val r2dbcUrl = "r2dbc:postgresql://${postgres.host}:${postgres.getMappedPort(PostgreSQLContainer.POSTGRESQL_PORT)}/${postgres.databaseName}"
             TestPropertyValues.of(
+                "spring.r2dbc.url=$r2dbcUrl",
+                "spring.r2dbc.username=${postgres.username}",
+                "spring.r2dbc.password=${postgres.password}",
                 "spring.datasource.url=${postgres.jdbcUrl}",
                 "spring.datasource.username=${postgres.username}",
                 "spring.datasource.password=${postgres.password}",
+                "spring.flyway.url=${postgres.jdbcUrl}",
+                "spring.flyway.user=${postgres.username}",
+                "spring.flyway.password=${postgres.password}",
                 "weather.api.url=http://localhost:\${wiremock.server.port}"
             ).applyTo(configurableApplicationContext.environment)
         }

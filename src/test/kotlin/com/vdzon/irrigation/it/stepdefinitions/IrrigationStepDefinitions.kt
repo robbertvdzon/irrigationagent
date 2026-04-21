@@ -10,6 +10,8 @@ import io.cucumber.java.Before
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.toList
 import org.junit.jupiter.api.Assertions.*
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDate
@@ -32,7 +34,7 @@ class IrrigationStepDefinitions {
     private lateinit var irrigationEventRepository: IrrigationEventRepository
 
     @Before
-    fun setup() {
+    fun setup() = runBlocking {
         weatherForecastRepository.deleteAll()
         rainHistoryRepository.deleteAll()
         irrigationAdviceRepository.deleteAll()
@@ -73,6 +75,7 @@ class IrrigationStepDefinitions {
     @When("the daily advice is generated")
     fun the_daily_advice_is_generated() {
         agent.generateDailyAdvice()
+        Thread.sleep(1000) // Wait for async event processing
     }
 
     @When("the daily advice is executed")
@@ -81,21 +84,21 @@ class IrrigationStepDefinitions {
     }
 
     @Then("the advice should be {int} minutes")
-    fun the_advice_should_be_minutes(minutes: Int) {
+    fun the_advice_should_be_minutes(minutes: Int) = runBlocking {
         val advice = irrigationAdviceRepository.findByDate(LocalDate.now())
         assertNotNull(advice)
         assertEquals(minutes, advice?.durationMinutes)
     }
 
     @Then("the irrigation should have been executed")
-    fun the_irrigation_should_have_been_executed() {
-        val events = irrigationEventRepository.findAll()
+    fun the_irrigation_should_have_been_executed() = runBlocking {
+        val events = irrigationEventRepository.findAll().toList()
         assertTrue(events.any { it.status == "COMPLETED" }, "There should be a completed irrigation event")
     }
 
     @Then("the irrigation should not have been executed")
-    fun the_irrigation_should_not_have_been_executed() {
-        val events = irrigationEventRepository.findAll()
+    fun the_irrigation_should_not_have_been_executed() = runBlocking {
+        val events = irrigationEventRepository.findAll().toList()
         assertTrue(events.none { it.eventDate.toLocalDate() == LocalDate.now() }, "There should be no irrigation event for today")
     }
 }

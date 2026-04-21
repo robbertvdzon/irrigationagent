@@ -1,17 +1,18 @@
 package com.vdzon.irrigation.advisory.internal.persistence
 
-import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import org.springframework.stereotype.Repository
+import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
 @Repository
-interface WeatherForecastRepository : JpaRepository<WeatherForecastEntity, Int> {
-    fun findByForecastDate(date: LocalDate): WeatherForecastEntity?
-    fun findTop7ByOrderByForecastDateDesc(): List<WeatherForecastEntity>
+interface WeatherForecastRepository : CoroutineCrudRepository<WeatherForecastEntity, Int> {
+    suspend fun findByForecastDate(date: LocalDate): WeatherForecastEntity?
+    fun findAllByOrderByForecastDateDesc(): Flow<WeatherForecastEntity>
 }
 
 @Repository
-interface RainHistoryRepository : JpaRepository<RainHistoryEntity, Int> {
-    fun findByDate(date: LocalDate): RainHistoryEntity?
-    fun findTop7ByOrderByDateDesc(): List<RainHistoryEntity>
+interface RainHistoryRepository : CoroutineCrudRepository<RainHistoryEntity, Int> {
+    suspend fun findByDate(date: LocalDate): RainHistoryEntity?
+    fun findAllByOrderByDateDesc(): Flow<RainHistoryEntity>
 }

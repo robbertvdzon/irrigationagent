@@ -1,8 +1,9 @@
 package com.vdzon.irrigation.advisory.internal
 
-import org.springframework.cloud.openfeign.FeignClient
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
+import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.awaitBody
 
 data class ForecastResponse(
     val date: String,
@@ -14,11 +15,24 @@ data class RainHistoryResponse(
     val rainMm: Double
 )
 
-@FeignClient(name = "weatherClient", url = "\${weather.api.url}")
-interface WeatherClient {
-    @GetMapping("/forecast")
-    fun getDailyForecast(): ForecastResponse
+@Component
+class WeatherClient(
+    @Value("\${weather.api.url}") private val baseUrl: String,
+    webClientBuilder: WebClient.Builder
+) {
+    private val webClient by lazy { webClientBuilder.baseUrl(baseUrl).build() }
 
-    @GetMapping("/history")
-    fun getRainHistory(@RequestParam days: Int): List<RainHistoryResponse>
+    suspend fun getDailyForecast(): ForecastResponse {
+        return webClient.get()
+            .uri("/forecast")
+            .retrieve()
+            .awaitBody<ForecastResponse>()
+    }
+
+    suspend fun getRainHistory(days: Int): List<RainHistoryResponse> {
+        return webClient.get()
+            .uri { it.path("/history").queryParam("days", days).build() }
+            .retrieve()
+            .awaitBody<List<RainHistoryResponse>>()
+    }
 }

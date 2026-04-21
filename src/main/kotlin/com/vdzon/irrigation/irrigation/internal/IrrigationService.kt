@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import kotlinx.coroutines.flow.toList
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -20,22 +21,21 @@ class IrrigationService(
 
     @EventListener
     @Transactional
-    override fun onIrrigationProposed(event: IrrigationProposed) {
+    override suspend fun onIrrigationProposed(event: IrrigationProposed) {
         logger.info("Received irrigation proposal for ${event.date}: ${event.durationMinutes} minutes")
         saveAdvice(event.date, event.durationMinutes, "PENDING")
     }
 
     @Transactional
-    override fun saveAdvice(date: LocalDate, minutes: Int, status: String) {
+    override suspend fun saveAdvice(date: LocalDate, minutes: Int, status: String) {
         val advice = irrigationAdviceRepository.findByDate(date) ?: IrrigationAdviceEntity(date = date, durationMinutes = minutes, status = status)
-        advice.durationMinutes = minutes
-        advice.status = status
-        irrigationAdviceRepository.save(advice)
+        val updatedAdvice = advice.copy(durationMinutes = minutes, status = status)
+        irrigationAdviceRepository.save(updatedAdvice)
         logger.info("Advice for $date saved with status $status")
     }
 
     @Transactional
-    override fun executeAdvice(date: LocalDate) {
+    override suspend fun executeAdvice(date: LocalDate) {
         val advice = irrigationAdviceRepository.findByDate(date)
         if (advice == null || advice.durationMinutes <= 0) {
             logger.info("No irrigation needed or advice found for $date")
@@ -50,8 +50,8 @@ class IrrigationService(
         logger.info("Executing irrigation advice for $date: ${advice.durationMinutes} minutes")
         hardwareIrrigationAdapter.startIrrigation(advice.durationMinutes)
         
-        advice.status = "EXECUTED"
-        irrigationAdviceRepository.save(advice)
+        val updatedAdvice = advice.copy(status = "EXECUTED")
+        irrigationAdviceRepository.save(updatedAdvice)
 
         irrigationEventRepository.save(
             IrrigationEventEntity(
@@ -62,7 +62,7 @@ class IrrigationService(
         )
     }
 
-    override fun getAdvices() = irrigationAdviceRepository.findTop7ByOrderByDateDesc()
-    override fun getTodayAdvice() = irrigationAdviceRepository.findByDate(LocalDate.now())
-    override fun getEvents() = irrigationEventRepository.findTop7ByOrderByEventDateDesc()
+    override suspend fun getAdvices() = irrigationAdviceRepository.findAllByOrderByDateDesc().toList()
+    override suspend fun getTodayAdvice() = irrigationAdviceRepository.findByDate(LocalDate.now())
+    override suspend fun getEvents() = irrigationEventRepository.findAllByOrderByEventDateDesc().toList()
 }

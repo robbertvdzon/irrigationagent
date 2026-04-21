@@ -3,18 +3,24 @@ spring:
     name: irrigation-agent
   thymeleaf:
     cache: false
+  r2dbc:
+    url: r2dbc:postgresql://${DB_HOST:localhost}:5432/${DB_NAME:irrigation}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:5432/${DB_NAME:irrigation}
     username: ${DB_USER:postgres}
     password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
   flyway:
     enabled: true
     locations: classpath:migration
+  threads:
+    virtual:
+      enabled: true
+  sql:
+    init:
+      mode: always
 
 weather:
   api:

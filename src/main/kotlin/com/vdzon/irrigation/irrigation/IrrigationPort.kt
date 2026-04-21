@@ -6,10 +6,10 @@ import com.vdzon.irrigation.irrigation.internal.persistence.IrrigationEventEntit
 import java.time.LocalDate
 
 interface IrrigationPort {
-    fun onIrrigationProposed(event: IrrigationProposed)
-    fun saveAdvice(date: LocalDate, minutes: Int, status: String)
-    fun executeAdvice(date: LocalDate)
-    fun getAdvices(): List<IrrigationAdviceEntity>
-    fun getTodayAdvice(): IrrigationAdviceEntity?
-    fun getEvents(): List<IrrigationEventEntity>
+    suspend fun onIrrigationProposed(event: IrrigationProposed)
+    suspend fun saveAdvice(date: LocalDate, minutes: Int, status: String)
+    suspend fun executeAdvice(date: LocalDate)
+    suspend fun getAdvices(): List<IrrigationAdviceEntity>
+    suspend fun getTodayAdvice(): IrrigationAdviceEntity?
+    suspend fun getEvents(): List<IrrigationEventEntity>
 }
