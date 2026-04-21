@@ -1,15 +1,14 @@
 Project: Garden Irrigation Advisor
 
 Doen:
-- .junie maken
-- specs maken
-- ADR's maken
-- modulith gebruiken
-- events gebruiken (persisted)
-- saga's
-- alles async
-- spring AI gebruiken
-- laatste kotlin en spring versie
+[X] specs maken
+[X] ADR's maken
+[ ] modulith gebruiken
+[ ] events gebruiken (persisted)
+[ ] saga's
+[ ] alles async
+[ ] spring AI gebruiken
+[ ] laatste kotlin en spring versie
 
 Goal:
 Build a small modular application that decides whether to irrigate a garden zone based on weather data.
