@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/history"
+  },
+  "response": {
+    "status": 200,
+    "body": "[{\"date\": \"2026-04-20\", \"rainMm\": 2.0}, {\"date\": \"2026-04-19\", \"rainMm\": 0.0}, {\"date\": \"2026-04-18\", \"rainMm\": 5.0}, {\"date\": \"2026-04-17\", \"rainMm\": 0.0}, {\"date\": \"2026-04-16\", \"rainMm\": 1.0}, {\"date\": \"2026-04-15\", \"rainMm\": 0.0}, {\"date\": \"2026-04-14\", \"rainMm\": 3.0}]",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

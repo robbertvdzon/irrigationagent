@@ -1,0 +1,22 @@
+<div th:fragment="advice-section" id="advice-section" xmlns:th="http://www.thymeleaf.org">
+    <div th:if="${advice == null}">
+        <p>Geen advies beschikbaar voor vandaag.</p>
+        <button class="btn" hx-post="/calculate-advice" hx-target="#advice-section">Bereken Advies</button>
+    </div>
+    <div th:if="${advice != null}">
+        <p><strong>Datum:</strong> <span th:text="${advice.date}"></span></p>
+        <p><strong>Advies:</strong> <span th:text="${advice.durationMinutes}"></span> minuten beregenen</p>
+        <p><strong>Status:</strong> <span th:text="${advice.status}"></span></p>
+
+        <div class="input-group">
+            <label for="minutes">Pas advies aan (minuten):</label>
+            <input type="number" id="minutes" name="minutes" th:value="${advice.durationMinutes}">
+            <button class="btn" hx-put="/update-advice" hx-include="#minutes" hx-target="#advice-section">Update</button>
+        </div>
+
+        <div style="margin-top: 15px;">
+            <button th:if="${advice.status != 'EXECUTED'}" class="btn btn-success" hx-post="/execute-now" hx-target="#advice-section">Voer advies nu uit</button>
+            <span th:if="${advice.status == 'EXECUTED'}">✅ Reeds uitgevoerd</span>
+        </div>
+    </div>
+</div>

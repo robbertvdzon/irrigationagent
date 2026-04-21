@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/forecast"
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"date\": \"2026-04-21\", \"rainMm\": 1.0}",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

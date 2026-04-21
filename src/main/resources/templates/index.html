@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Garden Irrigation Advisor</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <style>
+        body { font-family: sans-serif; margin: 2em; background-color: #f4f7f6; }
+        h1, h2 { color: #2c3e50; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; margin-top: 1em; }
+        th, td { text-align: left; padding: 8px; border-bottom: 1px solid #ddd; }
+        th { background-color: #ecf0f1; }
+        .card { border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin-bottom: 20px; background-color: #fff; }
+        .btn { padding: 8px 16px; cursor: pointer; border: none; border-radius: 4px; background-color: #3498db; color: white; }
+        .btn:hover { background-color: #2980b9; }
+        .btn-success { background-color: #2ecc71; }
+        .btn-success:hover { background-color: #27ae60; }
+        .input-group { margin-top: 10px; }
+        input[type="number"] { padding: 8px; border-radius: 4px; border: 1px solid #ddd; width: 60px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Garden Irrigation Advisor</h1>
+
+    <div class="card">
+        <h2>Huidig Advies</h2>
+        <div id="advice-section" th:insert="~{fragments/advice :: advice-section}">
+            <!-- HTMX fragment content will land here -->
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Status & Historie</h2>
+        <h3>Forecast & Regen historie (afgelopen week)</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Datum</th>
+                    <th>Verwachte Regen (mm)</th>
+                    <th>Gevallen Regen (mm)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="f : ${forecasts}">
+                    <td th:text="${f.forecastDate}"></td>
+                    <td th:text="${f.rainExpectedMm}"></td>
+                    <td>-</td>
+                </tr>
+                <tr th:each="h : ${history}">
+                    <td th:text="${h.date}"></td>
+                    <td>-</td>
+                    <td th:text="${h.rainMm}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card">
+        <h3>Irrigatie Gebeurtenissen</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tijdstip</th>
+                    <th>Duur (min)</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="e : ${events}">
+                    <td th:text="${e.eventDate}"></td>
+                    <td th:text="${e.durationMinutes}"></td>
+                    <td th:text="${e.status}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
