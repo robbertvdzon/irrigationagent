@@ -1,15 +1,15 @@
-# ADR 0002: Event-Driven Architectuur en Persistente Events
+# ADR 0002: Event-Driven Architecture and Persistent Events
 
 ## Status
-Geaccepteerd
+Accepted
 
 ## Context
-De `README.md` specificeert dat we events moeten gebruiken, deze moeten persisteren en alles asynchroon moet verlopen waar mogelijk.
+The `README.md` specifies that we must use events, persist them, and everything should be asynchronous where possible.
 
-## Beslissing
-We gebruiken een **Event-Driven Architectuur** waarbij domein-events worden gebruikt voor communicatie tussen modules. Deze events worden opgeslagen in een `event_log` tabel in de database voor audit en mogelijke replay functionaliteit.
+## Decision
+We use an **Event-Driven Architecture** where domain events are used for communication between modules. These events are stored in an `irrigation_events` (or similar) table in the database for auditing and potential replay functionality.
 
-## Gevolgen
-- Modules publiceren events via Spring's `ApplicationEventPublisher`.
-- Events worden asynchroon afgehandeld (`@Async` of Spring Modulith's event handling).
-- Er is een centrale tabel `irrigation_events` (of vergelijkbaar) die alle belangrijke statusovergangen vastlegt.
+## Consequences
+- Modules publish events via Spring's `ApplicationEventPublisher`.
+- Events are handled asynchronously (`@Async` or Spring Modulith's event handling).
+- There is a central table capturing all important status transitions.

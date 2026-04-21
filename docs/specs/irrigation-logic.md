@@ -1,21 +1,21 @@
-# Specificatie: Irrigatie Logica
+# Specification: Irrigation Logic
 
-## Doel
-Bepalen of een tuin-zone beregend moet worden op basis van weersgegevens.
+## Goal
+Determine if a garden zone should be irrigated based on weather data.
 
-## Beslissingsregels
-De huidige logica (onderhevig aan verandering) is:
-1. Haal de weersverwachting voor vandaag op.
-2. Haal de regen historie van de afgelopen 7 dagen op.
-3. **Besluit:**
-   - ALS de verwachte regen vandaag < 2.0 mm
-   - EN de totale regen van de afgelopen week < 15.0 mm
-   - DAN: Adviseer 30 minuten beregening.
-   - ANDERS: Adviseer 0 minuten beregening.
+## Decision Rules
+The current logic (subject to change) is:
+1. Fetch the weather forecast for today.
+2. Fetch the rain history of the past 7 days.
+3. **Decision:**
+   - IF the expected rain today < 2.0 mm
+   - AND the total rain of the past week < 15.0 mm
+   - THEN: Advise 30 minutes of irrigation.
+   - ELSE: Advise 0 minutes of irrigation.
 
-## Proces (Saga)
-1. `EvaluateIrrigation`: Triggered door een schema (bijv. 06:00).
-2. `ProposeIrrigation`: Als beregening nodig is, maak een voorstel aan.
-3. `NotifyUser`: Stuur een bericht (WhatsApp/Mock) naar de gebruiker.
-4. `Wait`: Wacht een bepaalde tijd (bijv. tot 07:30) op annulering.
-5. `Execute`: Start de beregening als er niet geannuleerd is.
+## Process (Saga)
+1. `EvaluateIrrigation`: Triggered by a schedule (e.g., 06:00).
+2. `ProposeIrrigation`: If irrigation is needed, create a proposal.
+3. `NotifyUser`: Send a message (WhatsApp/Mock) to the user.
+4. `Wait`: Wait for a certain amount of time (e.g., until 07:30) for cancellation.
+5. `Execute`: Start irrigation if not cancelled.

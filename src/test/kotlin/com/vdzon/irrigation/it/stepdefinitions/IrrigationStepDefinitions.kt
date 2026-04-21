@@ -40,24 +40,24 @@ class IrrigationStepDefinitions {
         reset()
     }
 
-    @Given("de weersverwachting voorspelt {double} mm regen")
-    fun de_weersverwachting_voorspelt_mm_regen(rainMm: Double) {
+    @Given("the weather forecast predicts {double} mm rain")
+    fun the_weather_forecast_predicts_mm_rain(rainMm: Double) {
         val today = LocalDate.now().toString()
         stubFor(get(urlEqualTo("/forecast"))
             .willReturn(aResponse()
                 .withHeader("Content-Type", "application/json")
                 .withBody("""{"date": "$today", "rainMm": $rainMm}""")))
         
-        // Standaard ook historie mocken om nullpointers of lege historie logic te voorkomen
+        // Default also mock history to prevent nullpointers or empty history logic
         stubFor(get(urlPathEqualTo("/history"))
             .willReturn(aResponse()
                 .withHeader("Content-Type", "application/json")
                 .withBody("[]")))
     }
 
-    @Given("de regen historie van afgelopen week is {double} mm")
-    fun de_regen_historie_van_afgelopen_week_is_mm(totalRain: Double) {
-        // Mock een lijst van 7 dagen die samen totalRain mm regen hebben
+    @Given("the rain history of the past week is {double} mm")
+    fun the_rain_history_of_the_past_week_is_mm(totalRain: Double) {
+        // Mock a list of 7 days that together have totalRain mm rain
         val rainPerDay = totalRain / 7.0
         val historyJson = (1..7).map { day ->
             val date = LocalDate.now().minusDays(day.toLong()).toString()
@@ -70,32 +70,32 @@ class IrrigationStepDefinitions {
                 .withBody(historyJson)))
     }
 
-    @When("het dagelijkse advies wordt gegenereerd")
-    fun het_dagelijkse_advies_wordt_gegenereerd() {
+    @When("the daily advice is generated")
+    fun the_daily_advice_is_generated() {
         agent.generateDailyAdvice()
     }
 
-    @When("het dagelijkse advies wordt uitgevoerd")
-    fun het_dagelijkse_advies_wordt_uitgevoerd() {
+    @When("the daily advice is executed")
+    fun the_daily_advice_is_executed() {
         agent.executeDailyAdvice()
     }
 
-    @Then("moet het advies {int} minuten zijn")
-    fun moet_het_advies_minuten_zijn(minutes: Int) {
+    @Then("the advice should be {int} minutes")
+    fun the_advice_should_be_minutes(minutes: Int) {
         val advice = irrigationAdviceRepository.findByDate(LocalDate.now())
         assertNotNull(advice)
         assertEquals(minutes, advice?.durationMinutes)
     }
 
-    @Then("moet de irrigatie zijn uitgevoerd")
-    fun moet_de_irrigatie_zijn_uitgevoerd() {
+    @Then("the irrigation should have been executed")
+    fun the_irrigation_should_have_been_executed() {
         val events = irrigationEventRepository.findAll()
-        assertTrue(events.any { it.status == "COMPLETED" }, "Er zou een voltooid irrigatie event moeten zijn")
+        assertTrue(events.any { it.status == "COMPLETED" }, "There should be a completed irrigation event")
     }
 
-    @Then("moet de irrigatie niet zijn uitgevoerd")
-    fun moet_de_irrigatie_niet_zijn_uitgevoerd() {
+    @Then("the irrigation should not have been executed")
+    fun the_irrigation_should_not_have_been_executed() {
         val events = irrigationEventRepository.findAll()
-        assertTrue(events.none { it.eventDate.toLocalDate() == LocalDate.now() }, "Er zou geen irrigatie event moeten zijn voor vandaag")
+        assertTrue(events.none { it.eventDate.toLocalDate() == LocalDate.now() }, "There should be no irrigation event for today")
     }
 }

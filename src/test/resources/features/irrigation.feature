@@ -1,25 +1,25 @@
 Feature: Garden Irrigation Advisor
 
-  Scenario: Beregenen bij droogte en weinig regen in historie
-    Given de weersverwachting voorspelt 1.0 mm regen
-    And de regen historie van afgelopen week is 10.0 mm
-    When het dagelijkse advies wordt gegenereerd
-    Then moet het advies 30 minuten zijn
-    When het dagelijkse advies wordt uitgevoerd
-    Then moet de irrigatie zijn uitgevoerd
+  Scenario: Irrigating during drought and low rain in history
+    Given the weather forecast predicts 1.0 mm rain
+    And the rain history of the past week is 10.0 mm
+    When the daily advice is generated
+    Then the advice should be 30 minutes
+    When the daily advice is executed
+    Then the irrigation should have been executed
 
-  Scenario: Niet beregenen bij verwachte regen
-    Given de weersverwachting voorspelt 5.0 mm regen
-    And de regen historie van afgelopen week is 10.0 mm
-    When het dagelijkse advies wordt gegenereerd
-    Then moet het advies 0 minuten zijn
-    When het dagelijkse advies wordt uitgevoerd
-    Then moet de irrigatie niet zijn uitgevoerd
+  Scenario: Do not irrigate when rain is expected
+    Given the weather forecast predicts 5.0 mm rain
+    And the rain history of the past week is 10.0 mm
+    When the daily advice is generated
+    Then the advice should be 0 minutes
+    When the daily advice is executed
+    Then the irrigation should not have been executed
 
-  Scenario: Niet beregenen bij veel regen in historie
-    Given de weersverwachting voorspelt 1.0 mm regen
-    And de regen historie van afgelopen week is 20.0 mm
-    When het dagelijkse advies wordt gegenereerd
-    Then moet het advies 0 minuten zijn
-    When het dagelijkse advies wordt uitgevoerd
-    Then moet de irrigatie niet zijn uitgevoerd
+  Scenario: Do not irrigate when there was high rain in history
+    Given the weather forecast predicts 1.0 mm rain
+    And the rain history of the past week is 20.0 mm
+    When the daily advice is generated
+    Then the advice should be 0 minutes
+    When the daily advice is executed
+    Then the irrigation should not have been executed

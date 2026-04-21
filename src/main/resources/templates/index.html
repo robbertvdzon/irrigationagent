@@ -24,21 +24,21 @@
     <h1>Garden Irrigation Advisor</h1>
 
     <div class="card">
-        <h2>Huidig Advies</h2>
+        <h2>Current Advice</h2>
         <div id="advice-section" th:insert="~{fragments/advice :: advice-section}">
             <!-- HTMX fragment content will land here -->
         </div>
     </div>
 
     <div class="card">
-        <h2>Status & Historie</h2>
-        <h3>Forecast & Regen historie (afgelopen week)</h3>
+        <h2>Status & History</h2>
+        <h3>Forecast & Rain history (past week)</h3>
         <table>
             <thead>
                 <tr>
-                    <th>Datum</th>
-                    <th>Verwachte Regen (mm)</th>
-                    <th>Gevallen Regen (mm)</th>
+                    <th>Date</th>
+                    <th>Expected Rain (mm)</th>
+                    <th>Actual Rain (mm)</th>
                 </tr>
             </thead>
             <tbody>
@@ -57,12 +57,12 @@
     </div>
 
     <div class="card">
-        <h3>Irrigatie Gebeurtenissen</h3>
+        <h3>Irrigation Events</h3>
         <table>
             <thead>
                 <tr>
-                    <th>Tijdstip</th>
-                    <th>Duur (min)</th>
+                    <th>Timestamp</th>
+                    <th>Duration (min)</th>
                     <th>Status</th>
                 </tr>
             </thead>

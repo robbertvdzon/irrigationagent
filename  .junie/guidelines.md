@@ -1,13 +1,13 @@
-# Junie Richtlijnen voor Garden Irrigation Advisor
+# Junie Guidelines for Garden Irrigation Advisor
 
-## Project Documentatie
-Alle architectuur-beslissingen en specificaties moeten worden geraadpleegd voordat wijzigingen worden doorgevoerd:
-- **ADR's:** Zie `docs/adr/` voor geaccepteerde ontwerpkeuzes.
-- **Specs:** Zie `docs/specs/` voor functionele en technische specificaties.
+## Project Documentation
+All architecture decisions and specifications must be consulted before implementing changes:
+- **ADRs:** See `docs/adr/` for accepted design choices.
+- **Specs:** See `docs/specs/` for functional and technical specifications.
 
-## Regels voor de Agent
-1. **Modules:** Respecteer de modulegrenzen zoals gedefinieerd in de specs. Gebruik geen directe cross-module imports tenzij strikt noodzakelijk voor de Spring Modulith API.
-2. **Events:** Gebruik domein-events voor communicatie tussen modules. Persisteer belangrijke domein-events in de database.
-3. **Saga's:** De flow van evaluatie naar notificatie naar uitvoering wordt beheerd door een saga/process manager.
-4. **Taal:** Communiceer met de gebruiker in het Nederlands. Code-commentaren mogen in het Engels blijven conform de bestaande stijl.
-5. **Nieuwe Beslissingen:** Leg nieuwe architecturale keuzes vast in een nieuw ADR-bestand in `docs/adr/`.
+## Rules for the Agent
+1. **Modules:** Respect module boundaries as defined in the specs. Do not use direct cross-module imports unless strictly necessary for the Spring Modulith API.
+2. **Events:** Use domain events for communication between modules. Persist important domain events in the database.
+3. **Sagas:** The flow from evaluation to notification to execution is managed by a saga/process manager.
+4. **Language:** Communicate with the user in English. Code comments and documentation must also be in English.
+5. **New Decisions:** Record new architectural choices in a new ADR file in `docs/adr/`.

@@ -1,15 +1,15 @@
 Project: Garden Irrigation Advisor
 
-Doen:
-[X] specs maken
-[X] ADR's maken
-[ ] IT tests met postgresql en wiremock
-[ ] modulith gebruiken
-[ ] events gebruiken (persisted)
-[ ] saga's
-[ ] alles async
-[ ] spring AI gebruiken
-[ ] laatste kotlin en spring versie
+Todo:
+[X] create specs
+[X] create ADRs
+[X] IT tests with postgresql and wiremock
+[X] use modulith
+[ ] use events (persisted)
+[ ] sagas
+[ ] everything async
+[ ] use spring AI
+[ ] latest kotlin and spring version
 
 Goal:
 Build a small modular application that decides whether to irrigate a garden zone based on weather data.

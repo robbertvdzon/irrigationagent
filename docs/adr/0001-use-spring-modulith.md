@@ -1,15 +1,15 @@
-# ADR 0001: Gebruik van Spring Modulith
+# ADR 0001: Use of Spring Modulith
 
 ## Status
-Geaccepteerd
+Accepted
 
 ## Context
-De applicatie moet modulair worden opgebouwd om onderhoudbaarheid te garanderen. We willen een "Modular Monolith" (Modulith) benadering gebruiken in plaats van microservices om complexiteit laag te houden.
+The application should be built modularly to ensure maintainability. We want to use a "Modular Monolith" (Modulith) approach instead of microservices to keep complexity low.
 
-## Beslissing
-We gebruiken **Spring Modulith** om de modulaire structuur te handhaven en te verifiëren. 
+## Decision
+We use **Spring Modulith** to maintain and verify the modular structure.
 
-## Gevolgen
-- Modules moeten strikt gescheiden blijven.
-- Directe toegang tussen modules is beperkt tot de publieke API (package-private vs public).
-- Event-driven communicatie heeft de voorkeur boven directe service calls tussen modules.
+## Consequences
+- Modules must remain strictly separated.
+- Direct access between modules is limited to the public API (package-private vs public).
+- Event-driven communication is preferred over direct service calls between modules.

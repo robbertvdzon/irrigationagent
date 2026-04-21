@@ -14,13 +14,13 @@ class IrrigationAgent(
 ) {
     private val logger = LoggerFactory.getLogger(IrrigationAgent::class.java)
 
-    @Scheduled(cron = "0 0 6 * * *") // Elke dag om 6:00
+    @Scheduled(cron = "0 0 6 * * *") // Every day at 6:00
     fun generateDailyAdvice() {
         logger.info("Generating daily advice (scheduled 06:00)")
         advisoryService.calculateAndProposeAdvice(LocalDate.now())
     }
 
-    @Scheduled(cron = "0 30 7 * * *") // Elke dag om 7:30
+    @Scheduled(cron = "0 30 7 * * *") // Every day at 7:30
     fun executeDailyAdvice() {
         logger.info("Executing daily advice (scheduled 07:30)")
         irrigationService.executeAdvice(LocalDate.now())
