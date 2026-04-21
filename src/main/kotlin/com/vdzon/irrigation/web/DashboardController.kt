@@ -7,11 +7,13 @@ import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 
 @Controller
-@RequestMapping("/")
 class DashboardController(private val irrigationService: IrrigationService) {
 
-    @GetMapping
+    private val logger = org.slf4j.LoggerFactory.getLogger(DashboardController::class.java)
+
+    @GetMapping("/")
     fun index(model: Model): String {
+        logger.info("Serving index page")
         populateModel(model)
         return "index"
     }
