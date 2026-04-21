@@ -14,8 +14,9 @@
             <button class="btn" hx-put="/update-advice" hx-include="#minutes" hx-target="#advice-section">Update</button>
         </div>
 
-        <div style="margin-top: 15px;">
+        <div style="margin-top: 15px; display: flex; gap: 10px;">
             <button th:if="${advice.status != 'EXECUTED'}" class="btn btn-success" hx-post="/execute-now" hx-target="#advice-section">Voer advies nu uit</button>
+            <button class="btn" hx-post="/calculate-advice" hx-target="#advice-section">Herbereken Advies</button>
             <span th:if="${advice.status == 'EXECUTED'}">✅ Reeds uitgevoerd</span>
         </div>
     </div>

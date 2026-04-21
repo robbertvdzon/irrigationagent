@@ -1,13 +1,17 @@
-package com.vdzon.irrigation.web
+package com.vdzon.irrigation.dashboard
 
-import com.vdzon.irrigation.service.IrrigationService
+import com.vdzon.irrigation.advisory.AdvisoryService
+import com.vdzon.irrigation.irrigation.IrrigationService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 
 @Controller
-class DashboardController(private val irrigationService: IrrigationService) {
+class DashboardController(
+    private val advisoryService: AdvisoryService,
+    private val irrigationService: IrrigationService
+) {
 
     private val logger = org.slf4j.LoggerFactory.getLogger(DashboardController::class.java)
 
@@ -26,14 +30,16 @@ class DashboardController(private val irrigationService: IrrigationService) {
 
     @PostMapping("/calculate-advice")
     fun calculateAdvice(model: Model): String {
-        irrigationService.calculateAndSaveAdvice(LocalDate.now())
+        advisoryService.calculateAndProposeAdvice(LocalDate.now())
+        // Note: In an async event-driven system, the advice might not be there IMMEDIATELY.
+        // For now, we assume it's fast or the UI will refresh.
         model.addAttribute("advice", irrigationService.getTodayAdvice())
         return "fragments/advice :: advice-section"
     }
 
     @PutMapping("/update-advice")
     fun updateAdvice(@RequestParam minutes: Int, model: Model): String {
-        irrigationService.updateAdvice(LocalDate.now(), minutes)
+        irrigationService.saveAdvice(LocalDate.now(), minutes, "MANUALLY_ADJUSTED")
         model.addAttribute("advice", irrigationService.getTodayAdvice())
         return "fragments/advice :: advice-section"
     }
@@ -46,8 +52,8 @@ class DashboardController(private val irrigationService: IrrigationService) {
     }
 
     private fun populateModel(model: Model) {
-        model.addAttribute("forecasts", irrigationService.getForecasts())
-        model.addAttribute("history", irrigationService.getRainHistory())
+        model.addAttribute("forecasts", advisoryService.getForecasts())
+        model.addAttribute("history", advisoryService.getRainHistory())
         model.addAttribute("advices", irrigationService.getAdvices())
         model.addAttribute("advice", irrigationService.getTodayAdvice())
         model.addAttribute("events", irrigationService.getEvents())

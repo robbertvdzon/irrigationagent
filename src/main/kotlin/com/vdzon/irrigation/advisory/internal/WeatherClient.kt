@@ -1,4 +1,4 @@
-package com.vdzon.irrigation.weather
+package com.vdzon.irrigation.advisory.internal
 
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.GetMapping

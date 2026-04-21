@@ -1,7 +1,10 @@
 package com.vdzon.irrigation.it.stepdefinitions
 
-import com.vdzon.irrigation.agent.IrrigationAgent
-import com.vdzon.irrigation.persistence.*
+import com.vdzon.irrigation.dashboard.IrrigationAgent
+import com.vdzon.irrigation.advisory.internal.persistence.WeatherForecastRepository
+import com.vdzon.irrigation.advisory.internal.persistence.RainHistoryRepository
+import com.vdzon.irrigation.irrigation.internal.persistence.IrrigationAdviceRepository
+import com.vdzon.irrigation.irrigation.internal.persistence.IrrigationEventRepository
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import io.cucumber.java.Before
 import io.cucumber.java.en.Given
