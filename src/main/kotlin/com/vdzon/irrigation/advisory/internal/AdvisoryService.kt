@@ -2,6 +2,8 @@ package com.vdzon.irrigation.advisory.internal
 
 import com.vdzon.irrigation.advisory.AdvisoryPort
 import com.vdzon.irrigation.advisory.IrrigationProposed
+import com.vdzon.irrigation.advisory.RainHistory
+import com.vdzon.irrigation.advisory.WeatherForecast
 import com.vdzon.irrigation.advisory.internal.persistence.*
 import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationEventPublisher
@@ -59,6 +61,13 @@ class AdvisoryService(
         eventPublisher.publishEvent(IrrigationProposed(date, durationMinutes))
     }
 
-    override suspend fun getForecasts() = weatherForecastRepository.findAllByOrderByForecastDateDesc().toList()
-    override suspend fun getRainHistory() = rainHistoryRepository.findAllByOrderByDateDesc().toList()
+    override suspend fun getForecasts(): List<WeatherForecast> =
+        weatherForecastRepository.findAllByOrderByForecastDateDesc()
+            .toList()
+            .map { WeatherForecast(it.forecastDate, it.rainExpectedMm) }
+
+    override suspend fun getRainHistory(): List<RainHistory> =
+        rainHistoryRepository.findAllByOrderByDateDesc()
+            .toList()
+            .map { RainHistory(it.date, it.rainMm) }
 }

@@ -1,6 +1,8 @@
 package com.vdzon.irrigation.irrigation.internal
 
 import com.vdzon.irrigation.advisory.IrrigationProposed
+import com.vdzon.irrigation.irrigation.IrrigationAdvice
+import com.vdzon.irrigation.irrigation.IrrigationEvent
 import com.vdzon.irrigation.irrigation.IrrigationPort
 import com.vdzon.irrigation.irrigation.internal.persistence.*
 import org.slf4j.LoggerFactory
@@ -62,7 +64,17 @@ class IrrigationService(
         )
     }
 
-    override suspend fun getAdvices() = irrigationAdviceRepository.findAllByOrderByDateDesc().toList()
-    override suspend fun getTodayAdvice() = irrigationAdviceRepository.findByDate(LocalDate.now())
-    override suspend fun getEvents() = irrigationEventRepository.findAllByOrderByEventDateDesc().toList()
+    override suspend fun getAdvices(): List<IrrigationAdvice> =
+        irrigationAdviceRepository.findAllByOrderByDateDesc()
+            .toList()
+            .map { IrrigationAdvice(it.date, it.durationMinutes, it.status) }
+
+    override suspend fun getTodayAdvice(): IrrigationAdvice? =
+        irrigationAdviceRepository.findByDate(LocalDate.now())
+            ?.let { IrrigationAdvice(it.date, it.durationMinutes, it.status) }
+
+    override suspend fun getEvents(): List<IrrigationEvent> =
+        irrigationEventRepository.findAllByOrderByEventDateDesc()
+            .toList()
+            .map { IrrigationEvent(it.eventDate, it.durationMinutes, it.status) }
 }
