@@ -1,6 +1,7 @@
 package com.vdzon.irrigation.dashboard.internal.web
 
 import com.vdzon.irrigation.advisory.AdvisoryPort
+import com.vdzon.irrigation.dashboard.DashboardPort
 import com.vdzon.irrigation.irrigation.IrrigationPort
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -10,7 +11,8 @@ import java.time.LocalDate
 @Controller
 class DashboardController(
     private val advisoryPort: AdvisoryPort,
-    private val irrigationPort: IrrigationPort
+    private val irrigationPort: IrrigationPort,
+    private val dashboardPort: DashboardPort
 ) {
 
     private val logger = org.slf4j.LoggerFactory.getLogger(DashboardController::class.java)
@@ -18,7 +20,12 @@ class DashboardController(
     @GetMapping("/")
     suspend fun index(model: Model): String {
         logger.info("Serving index page")
-        populateModel(model)
+        val data = dashboardPort.getDashboardData()
+        model.addAttribute("forecasts", data.forecasts)
+        model.addAttribute("history", data.history)
+        model.addAttribute("advices", data.advices)
+        model.addAttribute("advice", data.advice)
+        model.addAttribute("events", data.events)
         return "index"
     }
 
@@ -49,13 +56,5 @@ class DashboardController(
         irrigationPort.executeAdvice(LocalDate.now())
         model.addAttribute("advice", irrigationPort.getTodayAdvice())
         return "fragments/advice :: advice-section"
-    }
-
-    private suspend fun populateModel(model: Model) {
-        model.addAttribute("forecasts", advisoryPort.getForecasts())
-        model.addAttribute("history", advisoryPort.getRainHistory())
-        model.addAttribute("advices", irrigationPort.getAdvices())
-        model.addAttribute("advice", irrigationPort.getTodayAdvice())
-        model.addAttribute("events", irrigationPort.getEvents())
     }
 }
