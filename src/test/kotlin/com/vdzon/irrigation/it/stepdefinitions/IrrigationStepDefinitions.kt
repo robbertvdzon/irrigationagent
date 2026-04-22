@@ -14,12 +14,13 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.toList
 import org.junit.jupiter.api.Assertions.*
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.test.web.reactive.server.WebTestClient
 import java.time.LocalDate
 
 class IrrigationStepDefinitions {
 
     @Autowired
-    private lateinit var agent: IrrigationAgent
+    private lateinit var webTestClient: WebTestClient
 
     @Autowired
     private lateinit var weatherForecastRepository: WeatherForecastRepository
@@ -74,13 +75,20 @@ class IrrigationStepDefinitions {
 
     @When("the daily advice is generated")
     fun the_daily_advice_is_generated() {
-        agent.generateDailyAdvice()
+        webTestClient.post()
+            .uri("/calculate-advice")
+            .exchange()
+            .expectStatus().isOk
+        
         Thread.sleep(1000) // Wait for async event processing
     }
 
     @When("the daily advice is executed")
     fun the_daily_advice_is_executed() {
-        agent.executeDailyAdvice()
+        webTestClient.post()
+            .uri("/execute-now")
+            .exchange()
+            .expectStatus().isOk
     }
 
     @Then("the advice should be {int} minutes")
