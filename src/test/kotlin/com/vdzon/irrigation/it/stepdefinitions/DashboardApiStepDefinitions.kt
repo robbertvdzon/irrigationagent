@@ -9,7 +9,6 @@ import com.vdzon.irrigation.irrigation.internal.persistence.IrrigationAdviceRepo
 import com.vdzon.irrigation.irrigation.internal.persistence.IrrigationEventEntity
 import com.vdzon.irrigation.irrigation.internal.persistence.IrrigationEventRepository
 import com.vdzon.irrigation.dashboard.internal.web.api.DashboardDataDTO
-import com.jayway.jsonpath.JsonPath
 import io.cucumber.java.Before
 import io.cucumber.datatable.DataTable
 import io.cucumber.java.en.Given
