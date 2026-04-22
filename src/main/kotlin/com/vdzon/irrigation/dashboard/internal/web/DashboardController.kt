@@ -1,7 +1,7 @@
 package com.vdzon.irrigation.dashboard.internal.web
 
 import com.vdzon.irrigation.advisory.AdvisoryPort
-import com.vdzon.irrigation.dashboard.DashboardPort
+import com.vdzon.irrigation.dashboard.internal.service.DashboardService
 import com.vdzon.irrigation.irrigation.IrrigationPort
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -12,7 +12,7 @@ import java.time.LocalDate
 class DashboardController(
     private val advisoryPort: AdvisoryPort,
     private val irrigationPort: IrrigationPort,
-    private val dashboardPort: DashboardPort
+    private val dashboardService: DashboardService
 ) {
 
     private val logger = org.slf4j.LoggerFactory.getLogger(DashboardController::class.java)
@@ -20,7 +20,7 @@ class DashboardController(
     @GetMapping("/")
     suspend fun index(model: Model): String {
         logger.info("Serving index page")
-        val data = dashboardPort.getDashboardData()
+        val data = dashboardService.getDashboardData()
         model.addAttribute("forecasts", data.forecasts)
         model.addAttribute("history", data.history)
         model.addAttribute("advices", data.advices)

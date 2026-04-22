@@ -1,7 +1,6 @@
 package com.vdzon.irrigation.dashboard.internal.service
 
 import com.vdzon.irrigation.advisory.AdvisoryPort
-import com.vdzon.irrigation.dashboard.DashboardPort
 import com.vdzon.irrigation.dashboard.internal.web.api.DashboardDataDTO
 import com.vdzon.irrigation.irrigation.IrrigationPort
 import kotlinx.coroutines.async
@@ -12,9 +11,9 @@ import org.springframework.stereotype.Service
 class DashboardService(
     private val advisoryPort: AdvisoryPort,
     private val irrigationPort: IrrigationPort
-) : DashboardPort {
+) {
 
-    override suspend fun getDashboardData(): DashboardDataDTO = coroutineScope {
+    suspend fun getDashboardData(): DashboardDataDTO = coroutineScope {
         // We starten alle queries direct (parallel)
         val forecastsDeferred = async { advisoryPort.getForecasts() }
         val historyDeferred = async { advisoryPort.getRainHistory() }
