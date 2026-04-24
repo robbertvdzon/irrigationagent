@@ -5,7 +5,7 @@ import com.vdzon.irrigation.irrigation.IrrigationEvent
 import com.vdzon.irrigation.rainhistory.RainHistory
 import com.vdzon.irrigation.weatherforecast.WeatherForecast
 
-data class DashboardDataDTO(
+data class DashboardData(
     val forecasts: List<WeatherForecast>,
     val history: List<RainHistory>,
     val advices: List<IrrigationAdvice>,
