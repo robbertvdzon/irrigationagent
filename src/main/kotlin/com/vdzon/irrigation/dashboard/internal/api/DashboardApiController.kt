@@ -1,7 +1,7 @@
 package com.vdzon.irrigation.dashboard.internal.api
 
 import com.vdzon.irrigation.dashboard.internal.service.DashboardService
-import com.vdzon.irrigation.dashboard.internal.model.DashboardDataDTO
+import com.vdzon.irrigation.dashboard.internal.model.DashboardData
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -12,5 +12,5 @@ class DashboardApiController(
     private val dashboardService: DashboardService
 ) {
     @GetMapping("/data")
-    suspend fun getDashboardData(): DashboardDataDTO = dashboardService.getDashboardData()
+    suspend fun getDashboardData(): DashboardData = dashboardService.getDashboardData()
 }

@@ -8,7 +8,7 @@ import com.vdzon.irrigation.advisory.internal.persistence.IrrigationAdviceEntity
 import com.vdzon.irrigation.advisory.internal.persistence.IrrigationAdviceRepository
 import com.vdzon.irrigation.irrigation.internal.persistence.IrrigationEventEntity
 import com.vdzon.irrigation.irrigation.internal.persistence.IrrigationEventRepository
-import com.vdzon.irrigation.dashboard.internal.model.DashboardDataDTO
+import com.vdzon.irrigation.dashboard.internal.model.DashboardData
 import io.cucumber.java.Before
 import io.cucumber.datatable.DataTable
 import io.cucumber.java.en.Given
@@ -116,7 +116,7 @@ class DashboardApiStepDefinitions {
     }
 
     private var responseBody: ByteArray? = null
-    private var dashboardData: DashboardDataDTO? = null
+    private var dashboardData: DashboardData? = null
 
     @When("I call the dashboard data API")
     fun i_call_the_dashboard_data_api() {
@@ -124,7 +124,7 @@ class DashboardApiStepDefinitions {
             .uri("/api/dashboard/data")
             .exchange()
         val result = response.expectStatus().isOk
-            .expectBody(DashboardDataDTO::class.java).returnResult()
+            .expectBody(DashboardData::class.java).returnResult()
         responseBody = result.responseBodyContent
         dashboardData = result.responseBody
     }

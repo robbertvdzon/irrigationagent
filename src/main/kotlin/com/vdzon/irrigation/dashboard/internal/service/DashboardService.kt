@@ -1,6 +1,6 @@
 package com.vdzon.irrigation.dashboard.internal.service
 
-import com.vdzon.irrigation.dashboard.internal.model.DashboardDataDTO
+import com.vdzon.irrigation.dashboard.internal.model.DashboardData
 import com.vdzon.irrigation.advisory.AdvisoryPort
 import com.vdzon.irrigation.irrigation.IrrigationPort
 import com.vdzon.irrigation.rainhistory.RainHistoryPort
@@ -17,7 +17,7 @@ class DashboardService(
     private val irrigationPort: IrrigationPort
 ) {
 
-    suspend fun getDashboardData(): DashboardDataDTO = coroutineScope {
+    suspend fun getDashboardData(): DashboardData = coroutineScope {
         // We start all queries directly (parallel)
         val forecastsDeferred = async { weatherForecastPort.getAllForecasts() }
         val historyDeferred = async { rainHistoryPort.getRainHistory() }
@@ -26,7 +26,7 @@ class DashboardService(
         val eventsDeferred = async { irrigationPort.getEvents() }
 
         // We wait for the results and build the DTO
-        DashboardDataDTO(
+        DashboardData(
             forecasts = forecastsDeferred.await(),
             history = historyDeferred.await(),
             advices = advicesDeferred.await(),
