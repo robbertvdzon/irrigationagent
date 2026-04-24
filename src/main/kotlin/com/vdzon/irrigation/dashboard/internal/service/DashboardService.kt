@@ -1,4 +1,4 @@
-package com.vdzon.irrigation.dashboard.internal.dashboard.service
+package com.vdzon.irrigation.dashboard.internal.service
 
 import com.vdzon.irrigation.dashboard.internal.model.DashboardDataDTO
 import com.vdzon.irrigation.advisory.AdvisoryPort

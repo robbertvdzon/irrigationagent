@@ -1,7 +1,7 @@
 package com.vdzon.irrigation.dashboard.internal.dashboard.controller
 
 import com.vdzon.irrigation.advisory.AdvisoryPort
-import com.vdzon.irrigation.dashboard.internal.dashboard.service.DashboardService
+import com.vdzon.irrigation.dashboard.internal.service.DashboardService
 import com.vdzon.irrigation.irrigation.IrrigationPort
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
