@@ -1,7 +1,5 @@
 package com.vdzon.irrigation.advisory
 
-import com.vdzon.irrigation.weatherforecast.WeatherForecast
-import com.vdzon.irrigation.rainhistory.RainHistory
 import java.time.LocalDate
 
 /**
