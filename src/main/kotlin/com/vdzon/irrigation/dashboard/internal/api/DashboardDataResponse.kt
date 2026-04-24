@@ -1,9 +1,5 @@
 package com.vdzon.irrigation.dashboard.internal.api
 
-import com.vdzon.irrigation.advisory.IrrigationAdvice
-import com.vdzon.irrigation.irrigation.IrrigationEvent
-import com.vdzon.irrigation.rainhistory.RainHistory
-import com.vdzon.irrigation.weatherforecast.WeatherForecast
 import java.time.LocalDate
 import java.time.LocalDateTime
 
