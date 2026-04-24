@@ -1,6 +1,7 @@
-package com.vdzon.irrigation.dashboard.internal.web.api
+package com.vdzon.irrigation.dashboard.internal.api
 
-import com.vdzon.irrigation.dashboard.internal.service.DashboardService
+import com.vdzon.irrigation.dashboard.internal.dashboard.service.DashboardService
+import com.vdzon.irrigation.dashboard.internal.model.DashboardDataDTO
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController

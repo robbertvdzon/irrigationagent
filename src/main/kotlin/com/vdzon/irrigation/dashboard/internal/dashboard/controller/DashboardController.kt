@@ -1,11 +1,15 @@
-package com.vdzon.irrigation.dashboard.internal.web
+package com.vdzon.irrigation.dashboard.internal.dashboard.controller
 
 import com.vdzon.irrigation.advisory.AdvisoryPort
-import com.vdzon.irrigation.dashboard.internal.service.DashboardService
+import com.vdzon.irrigation.dashboard.internal.dashboard.service.DashboardService
 import com.vdzon.irrigation.irrigation.IrrigationPort
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestParam
 import java.time.LocalDate
 
 @Controller
@@ -15,7 +19,7 @@ class DashboardController(
     private val dashboardService: DashboardService
 ) {
 
-    private val logger = org.slf4j.LoggerFactory.getLogger(DashboardController::class.java)
+    private val logger = LoggerFactory.getLogger(DashboardController::class.java)
 
     @GetMapping("/")
     suspend fun index(model: Model): String {

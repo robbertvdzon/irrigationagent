@@ -1,6 +1,6 @@
-package com.vdzon.irrigation.dashboard.internal.service
+package com.vdzon.irrigation.dashboard.internal.dashboard.service
 
-import com.vdzon.irrigation.dashboard.internal.web.api.DashboardDataDTO
+import com.vdzon.irrigation.dashboard.internal.model.DashboardDataDTO
 import com.vdzon.irrigation.advisory.AdvisoryPort
 import com.vdzon.irrigation.irrigation.IrrigationPort
 import com.vdzon.irrigation.rainhistory.RainHistoryPort

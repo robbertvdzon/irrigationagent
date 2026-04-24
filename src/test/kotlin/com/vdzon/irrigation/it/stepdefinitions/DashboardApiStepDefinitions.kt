@@ -8,7 +8,7 @@ import com.vdzon.irrigation.advisory.internal.persistence.IrrigationAdviceEntity
 import com.vdzon.irrigation.advisory.internal.persistence.IrrigationAdviceRepository
 import com.vdzon.irrigation.irrigation.internal.persistence.IrrigationEventEntity
 import com.vdzon.irrigation.irrigation.internal.persistence.IrrigationEventRepository
-import com.vdzon.irrigation.dashboard.internal.web.api.DashboardDataDTO
+import com.vdzon.irrigation.dashboard.internal.model.DashboardDataDTO
 import io.cucumber.java.Before
 import io.cucumber.datatable.DataTable
 import io.cucumber.java.en.Given
@@ -21,7 +21,6 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
-import kotlin.math.abs
 
 class DashboardApiStepDefinitions {
 
