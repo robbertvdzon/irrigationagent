@@ -1,8 +1,8 @@
 package com.vdzon.irrigation.it.stepdefinitions
 
 import com.vdzon.irrigation.dashboard.internal.IrrigationAgent
-import com.vdzon.irrigation.advisory.internal.persistence.WeatherForecastRepository
-import com.vdzon.irrigation.advisory.internal.persistence.RainHistoryRepository
+import com.vdzon.irrigation.weatherforecast.internal.persistence.WeatherForecastRepository
+import com.vdzon.irrigation.rainhistory.internal.persistence.RainHistoryRepository
 import com.vdzon.irrigation.irrigation.internal.persistence.IrrigationAdviceRepository
 import com.vdzon.irrigation.irrigation.internal.persistence.IrrigationEventRepository
 import com.github.tomakehurst.wiremock.client.WireMock.*

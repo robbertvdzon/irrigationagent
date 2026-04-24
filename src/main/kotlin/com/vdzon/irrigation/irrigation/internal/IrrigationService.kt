@@ -23,7 +23,7 @@ class IrrigationService(
 
     @EventListener
     @Transactional
-    override suspend fun onIrrigationProposed(event: IrrigationProposed) {
+    suspend fun onIrrigationProposed(event: IrrigationProposed) {
         logger.info("Received irrigation proposal for ${event.date}: ${event.durationMinutes} minutes")
         saveAdvice(event.date, event.durationMinutes, "PENDING")
     }

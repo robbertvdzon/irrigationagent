@@ -1,9 +1,9 @@
 package com.vdzon.irrigation.it.stepdefinitions
 
-import com.vdzon.irrigation.advisory.internal.persistence.RainHistoryEntity
-import com.vdzon.irrigation.advisory.internal.persistence.RainHistoryRepository
-import com.vdzon.irrigation.advisory.internal.persistence.WeatherForecastEntity
-import com.vdzon.irrigation.advisory.internal.persistence.WeatherForecastRepository
+import com.vdzon.irrigation.rainhistory.internal.persistence.RainHistoryEntity
+import com.vdzon.irrigation.rainhistory.internal.persistence.RainHistoryRepository
+import com.vdzon.irrigation.weatherforecast.internal.persistence.WeatherForecastEntity
+import com.vdzon.irrigation.weatherforecast.internal.persistence.WeatherForecastRepository
 import com.vdzon.irrigation.irrigation.internal.persistence.IrrigationAdviceEntity
 import com.vdzon.irrigation.irrigation.internal.persistence.IrrigationAdviceRepository
 import com.vdzon.irrigation.irrigation.internal.persistence.IrrigationEventEntity
@@ -141,7 +141,7 @@ class DashboardApiStepDefinitions {
             val actualForecast = actualForecasts[index]
 
             val expectedDate = LocalDate.now().minusDays(expectedDaysAgo)
-            assertEquals(expectedDate, actualForecast.forecastDate, "Date at index $index did not match")
+            assertEquals(expectedDate, actualForecast.date, "Date at index $index did not match")
             assertEquals(expectedRainMm, actualForecast.rainExpectedMm, 0.001, "Rain at index $index did not match")
         }
     }
