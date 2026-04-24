@@ -15,15 +15,15 @@ class IrrigationExecutionAgent(
 ){
     private val logger = LoggerFactory.getLogger(IrrigationExecutionAgent::class.java)
 
-    @Scheduled(cron = "0 0 6 * * *") // Every day at 6:00
+    @Scheduled(cron = "\${irrigation.schedule.advice}") // Configured in application.yml
     fun generateDailyAdvice() = runBlocking {
-        logger.info("Generating daily advice (scheduled 06:00)")
+        logger.info("Generating daily advice")
         advisoryPort.calculateAndProposeAdvice(LocalDate.now())
     }
 
-    @Scheduled(cron = "0 30 7 * * *") // Every day at 7:30
+    @Scheduled(cron = "\${irrigation.schedule.execution}") // Configured in application.yml
     fun executeDailyAdvice() = runBlocking {
-        logger.info("Executing daily advice (scheduled 07:30)")
+        logger.info("Executing daily advice")
         val todayAdvice = advisoryPort.getTodayAdvice()
         if (todayAdvice != null && todayAdvice.durationMinutes > 0) {
             irrigationPort.startIrrigation(todayAdvice.durationMinutes)

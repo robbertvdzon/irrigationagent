@@ -32,4 +32,6 @@ weather:
     url: ${WEATHER_API_URL:http://localhost:8081}
 
 irrigation:
-  schedule: "0 0 6 * * *"
+  schedule:
+    advice: "0 0 6 * * *"
+    execution: "0 30 7 * * *"
