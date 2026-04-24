@@ -14,13 +14,18 @@ spring:
     driver-class-name: org.postgresql.Driver
   flyway:
     enabled: true
-    locations: classpath:migration
+    locations: classpath:db/migration
+    url: jdbc:postgresql://${DB_HOST:localhost}:5432/${DB_NAME:irrigation}
+    user: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
   threads:
     virtual:
       enabled: true
-  sql:
-    init:
-      mode: always
+  logging:
+    level:
+      org.springframework.web: INFO
+      org.hibernate.SQL: INFO
+      org.flywaydb: INFO
 
 weather:
   api:
@@ -28,8 +33,3 @@ weather:
 
 irrigation:
   schedule: "0 0 6 * * *"
-
-logging:
-  level:
-    org.springframework.web: DEBUG
-    org.hibernate.SQL: DEBUG
