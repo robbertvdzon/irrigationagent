@@ -5,6 +5,7 @@ CREATE TABLE weather_forecasts (
     id SERIAL PRIMARY KEY,
     forecast_date DATE NOT NULL,
     rain_expected_mm DOUBLE PRECISION NOT NULL,
+    max_temp_celsius DOUBLE PRECISION NOT NULL,
     fetched_at TIMESTAMP NOT NULL
 );
 

@@ -3,7 +3,7 @@ package com.vdzon.irrigation.it.stepdefinitions
 import com.vdzon.irrigation.dashboard.internal.IrrigationAgent
 import com.vdzon.irrigation.weatherforecast.internal.persistence.WeatherForecastRepository
 import com.vdzon.irrigation.rainhistory.internal.persistence.RainHistoryRepository
-import com.vdzon.irrigation.irrigation.internal.persistence.IrrigationAdviceRepository
+import com.vdzon.irrigation.advisory.internal.persistence.IrrigationAdviceRepository
 import com.vdzon.irrigation.irrigation.internal.persistence.IrrigationEventRepository
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import io.cucumber.java.Before
@@ -43,19 +43,24 @@ class IrrigationStepDefinitions {
         reset()
     }
 
-    @Given("the weather forecast predicts {double} mm rain")
-    fun the_weather_forecast_predicts_mm_rain(rainMm: Double) {
+    @Given("the weather forecast predicts {double} mm rain and {double} degrees")
+    fun the_weather_forecast_predicts_mm_rain_and_degrees(rainMm: Double, maxTemp: Double) {
         val today = LocalDate.now().toString()
         stubFor(get(urlEqualTo("/forecast"))
             .willReturn(aResponse()
                 .withHeader("Content-Type", "application/json")
-                .withBody("""{"date": "$today", "rainMm": $rainMm}""")))
+                .withBody("""{"date": "$today", "rainMm": $rainMm, "maxTemp": $maxTemp}""")))
         
         // Default also mock history to prevent nullpointers or empty history logic
         stubFor(get(urlPathEqualTo("/history"))
             .willReturn(aResponse()
                 .withHeader("Content-Type", "application/json")
                 .withBody("[]")))
+    }
+
+    @Given("the weather forecast predicts {double} mm rain")
+    fun the_weather_forecast_predicts_mm_rain(rainMm: Double) {
+        the_weather_forecast_predicts_mm_rain_and_degrees(rainMm, 20.0) // default 20 degrees
     }
 
     @Given("the rain history of the past week is {double} mm")
@@ -71,6 +76,18 @@ class IrrigationStepDefinitions {
             .willReturn(aResponse()
                 .withHeader("Content-Type", "application/json")
                 .withBody(historyJson)))
+    }
+
+    @Given("irrigation was executed yesterday")
+    fun irrigation_was_executed_yesterday() = runBlocking {
+        val yesterday = LocalDate.now().minusDays(1)
+        irrigationEventRepository.save(
+            com.vdzon.irrigation.irrigation.internal.persistence.IrrigationEventEntity(
+                eventDate = yesterday.atTime(8, 0),
+                durationMinutes = 30,
+                status = "COMPLETED"
+            )
+        )
     }
 
     @When("the daily advice is generated")
@@ -104,9 +121,15 @@ class IrrigationStepDefinitions {
         assertTrue(events.any { it.status == "COMPLETED" }, "There should be a completed irrigation event")
     }
 
+    @Then("the irrigation should not have been executed today")
+    fun the_irrigation_should_not_have_been_executed_today() = runBlocking {
+        val events = irrigationEventRepository.findAll().toList()
+        assertTrue(events.none { it.eventDate.toLocalDate() == LocalDate.now() }, "There should be no irrigation event for today")
+    }
+
     @Then("the irrigation should not have been executed")
     fun the_irrigation_should_not_have_been_executed() = runBlocking {
         val events = irrigationEventRepository.findAll().toList()
-        assertTrue(events.none { it.eventDate.toLocalDate() == LocalDate.now() }, "There should be no irrigation event for today")
+        assertTrue(events.none { it.status == "COMPLETED" && it.eventDate.toLocalDate() == LocalDate.now() }, "There should be no irrigation event for today")
     }
 }

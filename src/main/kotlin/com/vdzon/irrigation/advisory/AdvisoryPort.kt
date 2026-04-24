@@ -14,4 +14,19 @@ interface AdvisoryPort {
      * Fetches data from WeatherForecastPort and RainHistoryPort for this purpose.
      */
     suspend fun calculateAndProposeAdvice(date: LocalDate)
+
+    /**
+     * Saves a new advice or updates an existing advice.
+     */
+    suspend fun saveAdvice(date: LocalDate, minutes: Int, status: String)
+
+    /**
+     * Provides a list of all saved advice.
+     */
+    suspend fun getAdvices(): List<IrrigationAdvice>
+
+    /**
+     * Provides the advice for today, if present.
+     */
+    suspend fun getTodayAdvice(): IrrigationAdvice?
 }

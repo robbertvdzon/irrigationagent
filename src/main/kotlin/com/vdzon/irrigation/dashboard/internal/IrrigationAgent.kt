@@ -24,6 +24,10 @@ class IrrigationAgent(
     @Scheduled(cron = "0 30 7 * * *") // Every day at 7:30
     fun executeDailyAdvice() = runBlocking {
         logger.info("Executing daily advice (scheduled 07:30)")
-        irrigationPort.executeAdvice(LocalDate.now())
+         val todayAdvice = advisoryPort.getTodayAdvice()
+        if (todayAdvice != null && todayAdvice.durationMinutes > 0) {
+            irrigationPort.startIrrigation(todayAdvice.durationMinutes)
+            advisoryPort.saveAdvice(todayAdvice.date, todayAdvice.durationMinutes, "EXECUTED")
+        }
     }
 }

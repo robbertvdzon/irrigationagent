@@ -11,5 +11,6 @@ data class WeatherForecastEntity(
     var id: Int? = null,
     val forecastDate: LocalDate,
     val rainExpectedMm: Double,
+    val maxTempCelsius: Double,
     val fetchedAt: LocalDateTime = LocalDateTime.now()
 )

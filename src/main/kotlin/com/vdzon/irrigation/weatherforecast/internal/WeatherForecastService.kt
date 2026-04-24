@@ -18,15 +18,16 @@ class WeatherForecastService(
         val forecastResponse = weatherForecastClient.getDailyForecast()
         val entity = WeatherForecastEntity(
             forecastDate = LocalDate.parse(forecastResponse.date),
-            rainExpectedMm = forecastResponse.rainMm
+            rainExpectedMm = forecastResponse.rainMm,
+            maxTempCelsius = forecastResponse.maxTemp
         )
         weatherForecastRepository.save(entity)
-        return WeatherForecast(entity.forecastDate, entity.rainExpectedMm)
+        return WeatherForecast(entity.forecastDate, entity.rainExpectedMm, entity.maxTempCelsius)
     }
 
     override suspend fun getAllForecasts(): List<WeatherForecast> {
         return weatherForecastRepository.findAllByOrderByForecastDateDesc()
             .toList()
-            .map { WeatherForecast(it.forecastDate, it.rainExpectedMm) }
+            .map { WeatherForecast(it.forecastDate, it.rainExpectedMm, it.maxTempCelsius) }
     }
 }

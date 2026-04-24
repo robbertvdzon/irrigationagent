@@ -4,8 +4,8 @@ import com.vdzon.irrigation.rainhistory.internal.persistence.RainHistoryEntity
 import com.vdzon.irrigation.rainhistory.internal.persistence.RainHistoryRepository
 import com.vdzon.irrigation.weatherforecast.internal.persistence.WeatherForecastEntity
 import com.vdzon.irrigation.weatherforecast.internal.persistence.WeatherForecastRepository
-import com.vdzon.irrigation.irrigation.internal.persistence.IrrigationAdviceEntity
-import com.vdzon.irrigation.irrigation.internal.persistence.IrrigationAdviceRepository
+import com.vdzon.irrigation.advisory.internal.persistence.IrrigationAdviceEntity
+import com.vdzon.irrigation.advisory.internal.persistence.IrrigationAdviceRepository
 import com.vdzon.irrigation.irrigation.internal.persistence.IrrigationEventEntity
 import com.vdzon.irrigation.irrigation.internal.persistence.IrrigationEventRepository
 import com.vdzon.irrigation.dashboard.internal.web.api.DashboardDataDTO
@@ -56,10 +56,12 @@ class DashboardApiStepDefinitions {
         data.forEach { row ->
             val daysAgo = row["days_ago"]?.toLong() ?: 0L
             val rainMm = row["rain_mm"]?.toDouble() ?: 0.0
+            val maxTemp = row["max_temp"]?.toDouble() ?: 20.0
             weatherForecastRepository.save(
                 WeatherForecastEntity(
                     forecastDate = LocalDate.now().minusDays(daysAgo),
-                    rainExpectedMm = rainMm
+                    rainExpectedMm = rainMm,
+                    maxTempCelsius = maxTemp
                 )
             )
         }
@@ -138,11 +140,13 @@ class DashboardApiStepDefinitions {
         expectedData.forEachIndexed { index, row ->
             val expectedDaysAgo = row["days_ago"]?.toLong() ?: 0L
             val expectedRainMm = row["rain_mm"]?.toDouble() ?: 0.0
+            val expectedMaxTemp = row["max_temp"]?.toDouble() ?: 20.0
             val actualForecast = actualForecasts[index]
 
             val expectedDate = LocalDate.now().minusDays(expectedDaysAgo)
             assertEquals(expectedDate, actualForecast.date, "Date at index $index did not match")
             assertEquals(expectedRainMm, actualForecast.rainExpectedMm, 0.001, "Rain at index $index did not match")
+            assertEquals(expectedMaxTemp, actualForecast.maxTempCelsius, 0.001, "Max temp at index $index did not match")
         }
     }
 

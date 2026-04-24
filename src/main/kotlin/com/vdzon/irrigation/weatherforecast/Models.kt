@@ -9,5 +9,7 @@ data class WeatherForecast(
     /** The date of the weather forecast. */
     val date: LocalDate,
     /** The expected amount of precipitation in mm. */
-    val rainExpectedMm: Double
+    val rainExpectedMm: Double,
+    /** The expected maximum temperature in degrees Celsius. */
+    val maxTempCelsius: Double
 )

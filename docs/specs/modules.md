@@ -13,13 +13,14 @@ The application is divided into the following Spring Modulith modules:
 
 ### 3. Advisory (`advisory`)
 - Responsible for the evaluation of weather data and rain history.
-- Uses `WeatherForecastPort` and `RainHistoryPort`.
+- Manages irrigation advice lifecycle (saving, providing overview).
+- Uses `WeatherForecastPort`, `RainHistoryPort`, and `IrrigationPort` (for history).
 - Publishes `IrrigationProposed` events.
 
 ### 4. Irrigation (`irrigation`)
 - Responsible for the execution of the physical irrigation (or the mock).
-- Listens to `IrrigationProposed` and publishes `IrrigationStarted`/`IrrigationCompleted`.
-- Manages the zone status.
+- Manages the history of executed irrigation events.
+- Does NOT depend on other modules.
 
 ### 5. Notification (`notification`)
 - Responsible for external communication (e.g., WhatsApp).

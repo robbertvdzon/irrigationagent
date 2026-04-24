@@ -1,19 +1,6 @@
 package com.vdzon.irrigation.irrigation
 
-import java.time.LocalDate
 import java.time.LocalDateTime
-
-/**
- * Representation of an irrigation advice.
- */
-data class IrrigationAdvice(
-    /** The date for which the advice applies. */
-    val date: LocalDate,
-    /** The advised duration in minutes. */
-    val durationMinutes: Int,
-    /** The current status of the advice (e.g., PENDING, EXECUTED). */
-    val status: String
-)
 
 /**
  * Representation of an executed irrigation activity.

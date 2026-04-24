@@ -7,7 +7,8 @@ import org.springframework.web.reactive.function.client.awaitBody
 
 data class ForecastResponse(
     val date: String,
-    val rainMm: Double
+    val rainMm: Double,
+    val maxTemp: Double
 )
 
 @Component

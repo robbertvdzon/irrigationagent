@@ -31,7 +31,7 @@ class DashboardController(
 
     @GetMapping("/advice-fragment")
     suspend fun getAdviceFragment(model: Model): String {
-        model.addAttribute("advice", irrigationPort.getTodayAdvice())
+        model.addAttribute("advice", advisoryPort.getTodayAdvice())
         return "fragments/advice :: advice-section"
     }
 
@@ -40,21 +40,25 @@ class DashboardController(
         advisoryPort.calculateAndProposeAdvice(LocalDate.now())
         // Note: In an async event-driven system, the advice might not be there IMMEDIATELY.
         // For now, we assume it's fast or the UI will refresh.
-        model.addAttribute("advice", irrigationPort.getTodayAdvice())
+        model.addAttribute("advice", advisoryPort.getTodayAdvice())
         return "fragments/advice :: advice-section"
     }
 
     @PutMapping("/update-advice")
     suspend fun updateAdvice(@RequestParam minutes: Int, model: Model): String {
-        irrigationPort.saveAdvice(LocalDate.now(), minutes, "MANUALLY_ADJUSTED")
-        model.addAttribute("advice", irrigationPort.getTodayAdvice())
+        advisoryPort.saveAdvice(LocalDate.now(), minutes, "MANUALLY_ADJUSTED")
+        model.addAttribute("advice", advisoryPort.getTodayAdvice())
         return "fragments/advice :: advice-section"
     }
 
     @PostMapping("/execute-now")
     suspend fun executeNow(model: Model): String {
-        irrigationPort.executeAdvice(LocalDate.now())
-        model.addAttribute("advice", irrigationPort.getTodayAdvice())
+        val todayAdvice = advisoryPort.getTodayAdvice()
+        if (todayAdvice != null && todayAdvice.durationMinutes > 0) {
+            irrigationPort.startIrrigation(todayAdvice.durationMinutes)
+            advisoryPort.saveAdvice(todayAdvice.date, todayAdvice.durationMinutes, "EXECUTED")
+        }
+        model.addAttribute("advice", advisoryPort.getTodayAdvice())
         return "fragments/advice :: advice-section"
     }
 }
