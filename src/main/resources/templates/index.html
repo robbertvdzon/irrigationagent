@@ -43,7 +43,7 @@
             </thead>
             <tbody>
                 <tr th:each="f : ${forecasts}">
-                    <td th:text="${f.forecastDate}"></td>
+                    <td th:text="${f.date}"></td>
                     <td th:text="${f.rainExpectedMm}"></td>
                     <td>-</td>
                 </tr>
