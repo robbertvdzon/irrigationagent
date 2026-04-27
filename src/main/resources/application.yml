@@ -31,6 +31,40 @@ weather:
   api:
     url: ${WEATHER_API_URL:http://localhost:8081}
 
+resilience4j:
+  retry:
+    instances:
+      weatherForecast:
+        maxAttempts: 3
+        waitDuration: 1s
+        enableExponentialBackoff: true
+        exponentialBackoffMultiplier: 2
+  circuitbreaker:
+    instances:
+      weatherForecast:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowType: COUNT_BASED
+        minimumNumberOfCalls: 5
+        waitDurationInOpenState: 5s
+        failureRateThreshold: 50
+  ratelimiter:
+    instances:
+      weatherForecast:
+        limitForPeriod: 10
+        limitRefreshPeriod: 1s
+        timeoutDuration: 0
+  timelimiter:
+    instances:
+      weatherForecast:
+        timeoutDuration: 2s
+  bulkhead:
+    instances:
+      weatherForecast:
+        maxConcurrentCalls: 5
+        maxWaitDuration: 0
+
 irrigation:
   schedule:
     advice: "0 0 6 * * *"
