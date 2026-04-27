@@ -1,0 +1,38 @@
+flowchart LR
+%% External systems
+    WeatherAPI[(External Weather API)]
+    IrrigationHw[(Irrigation Controller / Adapter)]
+    DB[(PostgreSQL)]
+
+%% Modules (as subgraphs)
+    subgraph Advisory["Module: Advisory"]
+        AdvSvc[Advisory Service]
+    end
+
+    subgraph WeatherForecast["Module: WeatherForecast"]
+        WfSvc[Weather Forecast Service]
+        WfRepo[(R2DBC Repository)]
+        WfClient[WeatherForecastClient]
+    end
+
+    subgraph RainHistory["Module: RainHistory"]
+        RhClient[RainHistoryClient]
+    end
+
+
+
+%% Direct calls (solid)
+    AdvSvc -->|calls| WfSvc
+    WfSvc -->|reads/writes| WfRepo
+    WfRepo --> DB
+
+    AdvSvc -->|calls| WfClient
+    WfClient --> WeatherAPI
+
+    AdvSvc -->|calls| RhClient
+    RhClient --> WeatherAPI
+
+
+%% Execution
+    AdvSvc -->|calls| IrrSvc
+    IrrSvc --> IrrigationHw

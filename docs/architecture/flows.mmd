@@ -1,0 +1,16 @@
+sequenceDiagram
+    participant Scheduler
+    participant Advisory
+    participant Weather
+    participant Irrigation
+
+    Scheduler->>Advisory: Trigger irrigation evaluation
+    Advisory->>Weather: Fetch forecast & rain history
+    Weather-->>Advisory: Weather data
+
+    Advisory->>Advisory: Evaluate irrigation rules
+
+    Advisory->>Advisory: Wait for cancellation window
+
+    Advisory->>Irrigation: Start irrigation
+    Irrigation-->>Advisory: IrrigationCompleted

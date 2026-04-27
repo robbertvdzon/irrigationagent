@@ -22,7 +22,6 @@ Architecture:
 - Modules:
     - advisory
     - irrigation
-    - notification
 
 
 Core Flow:
