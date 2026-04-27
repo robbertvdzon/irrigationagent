@@ -9,10 +9,16 @@ import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.test.context.ContextConfiguration
 import org.testcontainers.containers.PostgreSQLContainer
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient
 
 @CucumberContextConfiguration
-@SpringBootTest(classes = [IrrigationApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(
+    classes = [IrrigationApplication::class],
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+    properties = ["wiremock.rest-template-ssl-enabled=false"]
+)
 @AutoConfigureWireMock(port = 0)
+@AutoConfigureWebTestClient// TODO: wot doet dit?
 @ContextConfiguration(initializers = [CucumberSpringConfiguration.Initializer::class])
 class CucumberSpringConfiguration {
 
