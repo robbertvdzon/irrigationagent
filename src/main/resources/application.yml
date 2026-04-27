@@ -52,7 +52,7 @@ resilience4j:
   ratelimiter:
     instances:
       weatherForecast:
-        limitForPeriod: 10
+        limitForPeriod: 100
         limitRefreshPeriod: 1s
         timeoutDuration: 0
   timelimiter:
@@ -62,7 +62,7 @@ resilience4j:
   bulkhead:
     instances:
       weatherForecast:
-        maxConcurrentCalls: 5
+        maxConcurrentCalls: 10
         maxWaitDuration: 0
 
 irrigation:
