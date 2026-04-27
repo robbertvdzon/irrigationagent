@@ -1,10 +1,11 @@
 package com.vdzon.irrigation.it.stepdefinitions
 
+import com.vdzon.irrigation.it.CucumberSpringConfiguration
 import com.vdzon.irrigation.weatherforecast.internal.persistence.WeatherForecastRepository
 import com.vdzon.irrigation.rainhistory.internal.persistence.RainHistoryRepository
 import com.vdzon.irrigation.advisory.internal.persistence.IrrigationAdviceRepository
 import com.vdzon.irrigation.irrigation.internal.persistence.IrrigationEventRepository
-import com.github.tomakehurst.wiremock.client.WireMock.*
+import com.github.tomakehurst.wiremock.client.WireMock
 import io.cucumber.java.Before
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
@@ -33,26 +34,28 @@ class IrrigationStepDefinitions {
     @Autowired
     private lateinit var irrigationEventRepository: IrrigationEventRepository
 
+    private val wireMock get() = CucumberSpringConfiguration.wireMock
+
     @Before
     fun setup() = runBlocking {
         weatherForecastRepository.deleteAll()
         rainHistoryRepository.deleteAll()
         irrigationAdviceRepository.deleteAll()
         irrigationEventRepository.deleteAll()
-        reset()
+        wireMock.resetAll()
     }
 
     @Given("the weather forecast predicts {double} mm rain and {double} degrees")
     fun the_weather_forecast_predicts_mm_rain_and_degrees(rainMm: Double, maxTemp: Double) {
         val today = LocalDate.now().toString()
-        stubFor(get(urlEqualTo("/forecast"))
-            .willReturn(aResponse()
+        wireMock.stubFor(WireMock.get(WireMock.urlEqualTo("/forecast"))
+            .willReturn(WireMock.aResponse()
                 .withHeader("Content-Type", "application/json")
                 .withBody("""{"date": "$today", "rainMm": $rainMm, "maxTemp": $maxTemp}""")))
-        
+
         // Default also mock history to prevent nullpointers or empty history logic
-        stubFor(get(urlPathEqualTo("/history"))
-            .willReturn(aResponse()
+        wireMock.stubFor(WireMock.get(WireMock.urlPathEqualTo("/history"))
+            .willReturn(WireMock.aResponse()
                 .withHeader("Content-Type", "application/json")
                 .withBody("[]")))
     }
@@ -71,8 +74,8 @@ class IrrigationStepDefinitions {
             """{"date": "$date", "rainMm": $rainPerDay}"""
         }.joinToString(prefix = "[", postfix = "]", separator = ",")
 
-        stubFor(get(urlPathEqualTo("/history"))
-            .willReturn(aResponse()
+        wireMock.stubFor(WireMock.get(WireMock.urlPathEqualTo("/history"))
+            .willReturn(WireMock.aResponse()
                 .withHeader("Content-Type", "application/json")
                 .withBody(historyJson)))
     }
