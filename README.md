@@ -20,23 +20,21 @@ Architecture:
 - Kotlin + Spring Boot
 - Use Spring Modulith (modular monolith)
 - Modules:
+    - weatherforecast
+    - rainhistory
     - advisory
     - irrigation
+    - agent
+    - dashboard
 
 
 Core Flow:
-1. Fetch weather forecast + past rainfall
-2. Evaluate irrigation need
-3. If irrigation is needed:
-    - create IrrigationProposal
-    - send notification (WhatsApp)
-    - wait X minutes
-4. If user cancels:
-    - mark proposal as cancelled
-5. If not cancelled:
-    - start irrigation
-6. complete irrigation
-7. persist all events
+1. Scheduler triggers advice generation at 06:00
+2. Fetch weather forecast + past rainfall (7 days)
+3. Evaluate irrigation need based on rain/temperature rules
+4. Save advice (PENDING) and publish IrrigationProposed event
+5. Scheduler triggers execution at 07:30
+6. If advice > 0 minutes: start irrigation and mark advice as EXECUTED
 
 
 Key Concepts:
@@ -48,31 +46,21 @@ Key Concepts:
 
 
 Events:
-- WeatherEvaluated
 - IrrigationProposed
-- NotificationSent
-- IrrigationCancelledByUser
-- IrrigationStarted
-- IrrigationCompleted
-
-
-Commands:
-- EvaluateIrrigation
-- ProposeIrrigation
-- CancelIrrigation
-- StartIrrigation
-- CompleteIrrigation
 
 
 External Integrations:
 - Weather API (forecast + past rain)
-- Notification adapter (WhatsApp or mock)
 - Irrigation adapter (HTTP or mock)
 
 
 REST API:
-- POST /zones/{id}/evaluate
-- POST /proposals/{id}/cancel
+- GET  /                      — dashboard UI
+- GET  /advice-fragment       — HTMX fragment: today's advice
+- POST /calculate-advice      — trigger advice calculation for today
+- POST /execute-now           — execute today's advice immediately
+- PUT  /update-advice?minutes — manually override today's advice duration
+- GET  /api/dashboard/data    — JSON: all dashboard data in one call
 
 
 Agent (optional):

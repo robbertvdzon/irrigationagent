@@ -22,9 +22,10 @@ The application is divided into the following Spring Modulith modules:
 - Manages the history of executed irrigation events.
 - Does NOT depend on other modules.
 
-### 5. Notification (`notification`)
-- Responsible for external communication (e.g., WhatsApp).
-- Listens to `IrrigationProposed` and publishes `NotificationSent`.
+### 5. Agent (`agent`)
+- Responsible for the scheduled triggering of advice generation and irrigation execution.
+- Uses `AdvisoryPort` and `IrrigationPort`.
+- Runs `generateDailyAdvice` at 06:00 and `executeDailyAdvice` at 07:30 (configurable via application.yml).
 
 ### 6. Dashboard (`dashboard`)
 - Responsible for the web UI and providing data for the frontend.

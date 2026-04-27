@@ -5,8 +5,13 @@ flowchart LR
     DB[(PostgreSQL)]
 
 %% Modules (as subgraphs)
+    subgraph Agent["Module: Agent"]
+        AgentSvc[IrrigationExecutionAgent]
+    end
+
     subgraph Advisory["Module: Advisory"]
         AdvSvc[Advisory Service]
+        AdvRepo[(R2DBC Repository)]
     end
 
     subgraph WeatherForecast["Module: WeatherForecast"]
@@ -16,23 +21,55 @@ flowchart LR
     end
 
     subgraph RainHistory["Module: RainHistory"]
+        RhSvc[Rain History Service]
+        RhRepo[(R2DBC Repository)]
         RhClient[RainHistoryClient]
     end
 
+    subgraph Irrigation["Module: Irrigation"]
+        IrrSvc[Irrigation Service]
+        IrrRepo[(R2DBC Repository)]
+        IrrHw[HardwareIrrigationAdapter]
+    end
 
+    subgraph Dashboard["Module: Dashboard"]
+        DashCtrl[Dashboard Controller]
+        DashApi[Dashboard API Controller]
+    end
 
-%% Direct calls (solid)
-    AdvSvc -->|calls| WfSvc
+%% Agent triggers
+    AgentSvc -->|calculateAndProposeAdvice| AdvSvc
+    AgentSvc -->|startIrrigation| IrrSvc
+
+%% Advisory calls via Ports
+    AdvSvc -->|WeatherForecastPort| WfSvc
+    AdvSvc -->|RainHistoryPort| RhSvc
+    AdvSvc -->|IrrigationPort| IrrSvc
+    AdvSvc -->|saves| AdvRepo
+    AdvRepo --> DB
+
+%% WeatherForecast internals
     WfSvc -->|reads/writes| WfRepo
+    WfSvc -->|fetches| WfClient
     WfRepo --> DB
-
-    AdvSvc -->|calls| WfClient
     WfClient --> WeatherAPI
 
-    AdvSvc -->|calls| RhClient
+%% RainHistory internals
+    RhSvc -->|reads/writes| RhRepo
+    RhSvc -->|fetches| RhClient
+    RhRepo --> DB
     RhClient --> WeatherAPI
 
+%% Irrigation internals
+    IrrSvc -->|saves| IrrRepo
+    IrrSvc -->|triggers| IrrHw
+    IrrRepo --> DB
+    IrrHw --> IrrigationHw
 
-%% Execution
-    AdvSvc -->|calls| IrrSvc
-    IrrSvc --> IrrigationHw
+%% Dashboard
+    DashCtrl -->|AdvisoryPort| AdvSvc
+    DashCtrl -->|IrrigationPort| IrrSvc
+    DashApi -->|reads data| AdvSvc
+    DashApi -->|reads data| WfSvc
+    DashApi -->|reads data| RhSvc
+    DashApi -->|reads data| IrrSvc

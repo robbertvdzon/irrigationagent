@@ -1,16 +1,30 @@
 sequenceDiagram
     participant Scheduler
+    participant Agent
     participant Advisory
-    participant Weather
+    participant WeatherForecast
+    participant RainHistory
     participant Irrigation
 
-    Scheduler->>Advisory: Trigger irrigation evaluation
-    Advisory->>Weather: Fetch forecast & rain history
-    Weather-->>Advisory: Weather data
-
+    Note over Scheduler,Irrigation: Step 1 — Generate advice (06:00)
+    Scheduler->>Agent: generateDailyAdvice (cron)
+    Agent->>Advisory: calculateAndProposeAdvice(today)
+    Advisory->>WeatherForecast: getForecast(today)
+    WeatherForecast-->>Advisory: WeatherForecast
+    Advisory->>RainHistory: updateRainHistory(7 days)
+    RainHistory-->>Advisory: List<RainHistory>
+    Advisory->>Irrigation: getEvents()
+    Irrigation-->>Advisory: List<IrrigationEvent>
     Advisory->>Advisory: Evaluate irrigation rules
+    Advisory->>Advisory: Save advice (PENDING)
+    Advisory->>Advisory: Publish IrrigationProposed event
 
-    Advisory->>Advisory: Wait for cancellation window
-
-    Advisory->>Irrigation: Start irrigation
-    Irrigation-->>Advisory: IrrigationCompleted
+    Note over Scheduler,Irrigation: Step 2 — Execute advice (07:30)
+    Scheduler->>Agent: executeDailyAdvice (cron)
+    Agent->>Advisory: getTodayAdvice()
+    Advisory-->>Agent: IrrigationAdvice
+    alt durationMinutes > 0
+        Agent->>Irrigation: startIrrigation(minutes)
+        Irrigation->>Irrigation: Save IrrigationEvent (COMPLETED)
+        Agent->>Advisory: saveAdvice(EXECUTED)
+    end
