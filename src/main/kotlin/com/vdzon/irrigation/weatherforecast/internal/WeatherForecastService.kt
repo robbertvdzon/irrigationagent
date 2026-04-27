@@ -18,8 +18,8 @@ class WeatherForecastService(
         val forecastResponse = weatherForecastClient.getDailyForecast()
         val entity = WeatherForecastEntity(
             forecastDate = LocalDate.parse(forecastResponse.date),
-            rainExpectedMm = forecastResponse.rainMm?: Double.MIN_VALUE,
-            maxTempCelsius = forecastResponse.maxTemp?: Double.MIN_VALUE
+            rainExpectedMm = forecastResponse.rainMm,
+            maxTempCelsius = forecastResponse.maxTemp
         )
         weatherForecastRepository.save(entity)
         return WeatherForecast(entity.forecastDate, entity.rainExpectedMm, entity.maxTempCelsius)

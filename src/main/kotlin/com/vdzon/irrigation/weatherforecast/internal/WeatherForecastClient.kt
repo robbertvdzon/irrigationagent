@@ -10,8 +10,8 @@ import org.springframework.web.service.annotation.HttpExchange
 
 data class ForecastResponse(
     val date: String,
-    val rainMm: Double?,// TODO: why nullable?
-    val maxTemp: Double?// TODO:  why nullable?
+    val rainMm: Double,
+    val maxTemp: Double
 )
 
 @HttpExchange("/forecast")
